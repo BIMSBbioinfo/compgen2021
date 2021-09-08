@@ -38,7 +38,7 @@ patient=readRDS(fileLGGann)
 **solution:**
 
 
-3. There are a number of ways to get variable importance for a classification problem. Run random forests on the classification problem above. Compare the variable importance metrics from random forest and the one obtained from DALEX. How many variables are the same in the top 10? [Difficulty: **Advanced**]
+3. There are a number of ways to get variable importance for a classification problem. Run random forests on the classification problem above. Compare the variable importance metrics from random forest and the one obtained from DALEX applied on the random forests model. How many variables are the same in the top 10? [Difficulty: **Advanced**]
 
 **solution:**
 
