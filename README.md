@@ -6,7 +6,7 @@
 
 # compgen2021 hands-on course on machine learning for genomics
 
-Course url: https://compgen.mdc-berlin.de/ 
+Course url: https://compgen.mdc-berlin.de/ or https://bioinformatics.mdc-berlin.de/compgen/2021/
 
 Organizer: Altuna Akalin (https://bioinformatics.mdc-berlin.de/ + http://al2na.co)
 
