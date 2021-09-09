@@ -23,18 +23,22 @@ Organizer: Altuna Akalin (https://bioinformatics.mdc-berlin.de/ + http://al2na.c
 - hypothesis testing
 - linear models.
 
-reading:
-slides:
-exercises+code: 
+reading: http://compgenomr.github.io/book/stats.html
+
+slides: https://github.com/BIMSBbioinfo/compgen2021/tree/main/week1/compgen2021_stats.pdf
+
+exercises+code: https://github.com/BIMSBbioinfo/compgen2021/tree/main/week1/
 
 ### Module 2: Unsupervised learning for genomics (9-15 August 2021)
 - Understanding basic intuition behind machine learning approaches. 
 - Using unsupervised learning to cluster and visualise data points
 - Dimension reduction techniques for visualisation and as input to clustering methods
 
-reading:
-slides:
-exercises+code: 
+reading: http://compgenomr.github.io/book/unsupervisedLearning.html
+
+slides: https://github.com/BIMSBbioinfo/compgen2021/tree/main/week2/compgen2021_unsupervisedLearning.pdf
+
+exercises+code: https://github.com/BIMSBbioinfo/compgen2021/tree/main/week2/
 
 
 ### Module 3: Supervised learning for genomics (16-22 August 2021)
@@ -42,6 +46,8 @@ exercises+code:
 - How to measure prediction performance
 - Understand and use cross-validation and related concepts
 
-reading:
-slides:
-exercises+code: 
+reading: http://compgenomr.github.io/book/supervisedLearning.html
+
+slides: https://github.com/BIMSBbioinfo/compgen2021/tree/main/week3/compgen2021_supervisedLearning.pdf
+
+exercises+code:  https://github.com/BIMSBbioinfo/compgen2021/tree/main/week3/
