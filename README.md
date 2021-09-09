@@ -7,9 +7,10 @@
 # compgen2021 hands-on course on machine learning for genomics
 
 Course url: https://compgen.mdc-berlin.de/ 
+
 Organizer: Altuna Akalin (https://bioinformatics.mdc-berlin.de/ + http://al2na.co)
 
-##Prerequisites 
+## Prerequisites 
 - Programming with R
 - Being able to make reports with Rmarkdown
 - Understanding of the basic probability and statistics concepts 
