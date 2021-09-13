@@ -84,7 +84,7 @@ knn_fitTrs <- train(subtype~., data = trs.g,
                  trControl=trctrl,
                  tuneGrid = data.frame(k=2:7)) # try k between 2-7
 
-# we will now train k-NN model
+# we will now train k-NN model with unscaled data
 knn_fit<- train(subtype~., data = tgexp, 
                  method = "knn",
                  trControl=trctrl,
@@ -97,23 +97,68 @@ knn_fit$results
 
 
 ```
-
+KNN model is better with scaled data.
 
 
 2. Bootstrap resampling can be used to measure the variability of the prediction error. Use bootstrap resampling with k-NN for the prediction accuracy. How different is it from cross-validation for different $k$s? [Difficulty: **Intermediate**]
 
 **solution:**
+bootstrap and CV are different.
+```{r}
+set.seed(101)
+trctrl2 <- trainControl(method = "boot",number=20,returnResamp="all")
 
+# we will now train k-NN model
+
+knnBoot <- train(subtype~., data = trs.g, method = "knn",
+                trControl=trctrl2,
+                tuneGrid = data.frame(k=1:12))
+# best k value by bootsraping accuracy
+kb<-knnBoot$bestTune
+
+```
 
 3. There are a number of ways to get variable importance for a classification problem. Run random forests on the classification problem above. Compare the variable importance metrics from random forest and the one obtained from DALEX applied on the random forests model. How many variables are the same in the top 10? [Difficulty: **Advanced**]
 
 **solution:**
+Here we are running variable importance on the the whole training set. Another
+way of doing this, would be to run importance metrics only on the test set
+after training. 
 
+```{r}
+library(DALEX)
+#random forest model
+set.seed(101)
+trCtrl = trainControl(method = "cv",number = 5,classProb=TRUE)
+rf = train(subtype~.,data = trs.g, method = "ranger", trControl=trCtrl,
+          importance = "impurity")
+
+#Then, let's run the explain function of DALEX with random forest model
+explainer = DALEX::explain(rf, label = "random forest",
+                            data =trs.g[,-1], y=trs.g[,1]=="CIMP")
+
+#feature importance
+dalrf = model_parts(explainer,B = 5,type="ratio")
+
+#plot the results
+plot(varImp(rf), top=10)
+plot(dalrf, max_vars=10)
+```
 
 4. Come up with a unified importance score by normalizing importance scores from random forests and DALEX, followed by taking the average of those scores. [Difficulty: **Advanced**]
 
 **solution:**
+```{r}
 
+rfimp=varImp(rf)$importance
+
+uniScore= merge(data.frame(id=row.names(rfimp), rf=rfimp[,1]),
+                data.frame(id=dalrf[,1], dalex=dalrf$dropout_loss),
+                     by="id")
+
+uniScore$avg= rowMeans(apply(uniScore[-1], 2, function(x) (x-min(x))/(max(x)-min(x))))
+uniScore[order(uniScore$avg, decreasing = T)[1:10],]
+```
 
 
 ### Regression
@@ -132,7 +177,7 @@ ameth=readRDS(fileMethAge)
 
 **solution:**
 ```{r,echo=FALSE,eval=FALSE}
-set.seed(4) # set the random number seed for reproducibility 
+set.seed(101) # set the random number seed for reproducibility 
 
 # removing less variable CpGs, not necessary but things run faster
 # with less variables
@@ -184,7 +229,7 @@ rfregFit$finalModel$r.squared
 2. Split 20% of the methylation-age data as test data and run elastic net regression on the training portion to tune parameters and test it on the test portion. [Difficulty: **Intermediate**] 
 **solution:**
 ```{r,echo=FALSE,eval=FALSE}
-set.seed(4) # set the random number seed for reproducibility 
+set.seed(101) # set the random number seed for reproducibility 
 
 # removing less variable CpGs, not necessary but things run faster
 # with less variables
@@ -236,5 +281,35 @@ rfregFit$finalModel$r.squared
 **HINT:** You need to install these extra packages and learn how to use them in the context of ensemble models. [Difficulty: **Advanced**] 
 
 **solution:**
+```{r}
+
+library(caretEnsemble)
+#set seed
+set.seed(101)
+
+tcontrol <- trainControl(
+    method="cv",
+     number=10,
+     savePredictions=TRUE,
+             classProbs=TRUE)
+
+#set model list
+modlist <- caretList(
+Age~., data=training,
+        trControl=my_control,
+methodList=c("glmnet", "ranger"))
 
 
+library(caretEnsemble)
+set.seed(101)
+ensemble <- caretEnsemble(
+modlist,
+trControl=trainControl(
+method = "cv",
+number=10,
+savePredictions=TRUE))
+
+class.res=predict(ensemble,testing[,-1])
+postResample(pred = class.res, obs = testing[,1])
+
+```
